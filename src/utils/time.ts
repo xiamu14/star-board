@@ -15,6 +15,11 @@ export function convertTimestamp(
   timestamp: string | number,
   format?: string
 ) {
+  console.log(
+    "%c [timestamp]",
+    "color:white;background: rgb(83,143,204);padding:4px",
+    timestamp
+  );
   try {
     const finalFormat =
       format || (type === "date" ? "YYYY/MM/DD" : "YYYY/MM/DD HH:mm:ss");

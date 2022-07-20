@@ -6,7 +6,7 @@ export interface Repo {
   language: string;
   description: string;
   topics: string[];
-  updateAt: string;
+  updatedAt: string;
   homepage: string;
   htmlUrl: string;
   url: string;
