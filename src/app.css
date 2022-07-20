@@ -1,0 +1,64 @@
+.table tbody {
+  height: 400px;
+  display: block;
+  overflow-y: scroll;
+  margin: 0 auto;
+}
+
+.table tbody::-webkit-scrollbar {
+  width: 0;
+}
+
+.table thead,
+.table tr {
+  display: block;
+}
+
+.table th,
+.table td {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+.table .index {
+  width: 60px;
+}
+
+.table .name {
+  width: 200px;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.table .developer {
+  width: 90px;
+}
+
+.table .developer > span {
+  width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.table .language {
+  width: 120px;
+}
+
+.table .description {
+  width: 330px;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.table .tags {
+  width: 200px;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.table .updatedAt {
+  width: 120px;
+}
