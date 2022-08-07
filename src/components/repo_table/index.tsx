@@ -16,9 +16,13 @@ const filter = (it: Repo, keyword: string) => {
 
 interface Props {
   keyword: string;
+  checkResult?: {
+    isValid: boolean;
+    isCurrent: boolean;
+  };
 }
 
-const RepoTable = React.memo(({ keyword }: Props) => {
+const RepoTable = React.memo(({ keyword, checkResult }: Props) => {
   const [visible, setVisible] = useState(false);
   const [list, setList] = useState<Repo[]>([]);
   const [total, setTotal] = useState(0);
@@ -50,8 +54,8 @@ const RepoTable = React.memo(({ keyword }: Props) => {
   );
 
   useEffect(() => {
-    getTableList({ offset: 0, searchWord: keyword });
-  }, [keyword]);
+    checkResult?.isCurrent && getTableList({ offset: 0, searchWord: keyword });
+  }, [keyword, checkResult]);
 
   const handleTurnPage = useCallback(
     async (_: number, offset: number) => {

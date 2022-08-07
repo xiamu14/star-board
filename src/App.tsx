@@ -2,33 +2,62 @@ import HeroBg from "./assets/hero-bg.png";
 import "./app.css";
 import { db } from "./database";
 import getRepos from "./utils/get-repos";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import RepoTable from "./components/repo_table";
 import Search from "./components/search";
+import checkUser from "./utils/check-user";
 
 const App = () => {
   const [total, setTotal] = useState(0);
   const [keyword, setKeyword] = useState("");
+
+  const [checkResult, setCheckResult] = useState<{
+    isValid: boolean;
+    isCurrent: boolean;
+  }>();
+
+  const user = useMemo(() => {
+    const search = window.location.href.split("/");
+    const user = search[search.length - 1];
+    return user;
+  }, []);
+
   useEffect(() => {
     const init = async () => {
+      const result = await checkUser(user);
+
+      console.log(
+        "%c result",
+        "background: #69c0ff; color: white; padding: 4px",
+        result
+      );
+
+      setCheckResult(result);
+
+      if (!result.isValid) return;
+
+      localStorage.setItem("user", user);
+
+      if (!result.isCurrent) return;
+
       // NOTE: 同步数据
       let count = await db.repos.count();
 
       if (count === 0) {
-        const collection = await getRepos();
+        const collection = await getRepos(user);
         count = collection.length;
         await db.repos.bulkAdd(collection);
       }
-
       setTotal(count);
     };
     init();
   }, []);
 
   const handleSyncRepos = async () => {
-    const collection = await getRepos();
+    const collection = await getRepos(user);
     await db.repos.clear();
     await db.repos.bulkAdd(collection);
+    setCheckResult({ isValid: true, isCurrent: true });
     setTotal(collection.length);
   };
 
@@ -43,9 +72,11 @@ const App = () => {
               Star Board 是一个用于管理 Github 星标仓库的网页。<br></br>
               通过标签和编程语言分类星标仓库，从而实现快速查找星标仓库。
             </p>
-            <button className="btn btn-primary" onClick={handleSyncRepos}>
-              同步数据
-            </button>
+            {checkResult?.isValid && (
+              <button className="btn btn-primary" onClick={handleSyncRepos}>
+                同步数据
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -62,7 +93,7 @@ const App = () => {
           <Search onSearch={setKeyword} />
         </div>
 
-        <RepoTable keyword={keyword} />
+        <RepoTable keyword={keyword} checkResult={checkResult} />
       </div>
     </div>
   );

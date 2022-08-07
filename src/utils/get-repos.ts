@@ -1,12 +1,12 @@
 import Matcher from "data-matcher";
 
-export default async function getRepos() {
+export default async function getRepos(user: string) {
   const pagesize = 100;
   let current = 1;
   let repoList: any[] = [];
   async function getRepo() {
     const response = await fetch(
-      `https://api.github.com/users/xiamu14/starred?page=${current}&per_page=${pagesize}`
+      `https://api.github.com/users/${user}/starred?page=${current}&per_page=${pagesize}`
     );
     const data = await response.json();
     repoList = repoList.concat(data);
@@ -18,11 +18,11 @@ export default async function getRepos() {
     }
   }
   await getRepo();
-  console.log(
-    "%c debug",
-    "color:white;background: rgb(83,143,204);padding:4px",
-    repoList
-  );
+  // console.log(
+  //   "%c debug",
+  //   "color:white;background: rgb(83,143,204);padding:4px",
+  //   repoList
+  // );
   const matcher = new Matcher(repoList);
   matcher
     .pick([
