@@ -9,7 +9,7 @@ export class MySubDexie extends Dexie {
   constructor() {
     super(DatabaseName);
     this.version(2.1).stores({
-      repos: "++id, name, language, updatedAt",
+      repos: "++id, name, language, updatedAt, pushedAt",
     });
   }
 }

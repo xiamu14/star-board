@@ -33,7 +33,7 @@ const RepoTable = React.memo(({ keyword, checkResult }: Props) => {
       orderBy?: string;
       searchWord?: string;
     }) => {
-      const { offset, orderBy = "updatedAt", searchWord = "" } = params;
+      const { offset, orderBy = "pushedAt", searchWord = "" } = params;
       setVisible(true);
       const total = await db.repos
         .filter((it) => filter(it, searchWord))

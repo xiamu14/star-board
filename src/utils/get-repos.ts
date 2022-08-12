@@ -34,6 +34,7 @@ export default async function getRepos(user: string) {
       "description",
       "topics",
       "updated_at",
+      "pushed_at",
       "homepage",
       "html_url",
     ])
@@ -43,6 +44,7 @@ export default async function getRepos(user: string) {
     })
     .editKey({ id: "originId" })
     .editKey({ updated_at: "updatedAt" })
+    .editKey({ pushed_at: "pushedAt" })
     .editKey({ html_url: "htmlUrl" });
   return matcher.data;
 }
