@@ -11,6 +11,10 @@ const Search = React.memo(({ onSearch }: Props) => {
       onSearch(value);
     }
   };
+  const handleClear = () => {
+    setValue("");
+    onSearch("");
+  };
   return (
     <div className="flex items-center">
       <input
@@ -21,12 +25,23 @@ const Search = React.memo(({ onSearch }: Props) => {
         onChange={(event) => {
           setValue(event.target.value);
         }}
+        onKeyDownCapture={(event) => {
+          if (event.key === "Enter") {
+            handleSearch();
+          }
+        }}
       />
       <button
         className="ml-4 h-[2.8rem] w-[6rem] rounded-[6px] btn-primary"
         onClick={handleSearch}
       >
         搜 索
+      </button>
+      <button
+        className="ml-4 h-[2.8rem] w-[6rem] rounded-[6px] btn-primary"
+        onClick={handleClear}
+      >
+        重置
       </button>
     </div>
   );

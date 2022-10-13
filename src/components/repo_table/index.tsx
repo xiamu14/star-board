@@ -28,20 +28,14 @@ const RepoTable = React.memo(({ keyword, checkResult }: Props) => {
   const [total, setTotal] = useState(0);
 
   const getTableList = useCallback(
-    async (params: {
-      offset: number;
-      orderBy?: string;
-      searchWord?: string;
-    }) => {
-      const { offset, orderBy = "id", searchWord = "" } = params;
+    async (params: { offset: number; orderBy?: string }) => {
+      const { offset, orderBy = "id" } = params;
       setVisible(true);
-      const total = await db.repos
-        .filter((it) => filter(it, searchWord))
-        .count();
+      const total = await db.repos.filter((it) => filter(it, keyword)).count();
       const data = await db.repos
         .orderBy(orderBy)
         // .reverse() //DESC
-        .filter((it) => filter(it, searchWord))
+        .filter((it) => filter(it, keyword))
         .offset(offset)
         .limit(limit)
         .toArray();
@@ -50,19 +44,16 @@ const RepoTable = React.memo(({ keyword, checkResult }: Props) => {
       setList(data);
       setVisible(false);
     },
-    []
+    [keyword]
   );
 
   useEffect(() => {
-    checkResult?.isCurrent && getTableList({ offset: 0, searchWord: keyword });
-  }, [keyword, checkResult]);
+    checkResult?.isCurrent && getTableList({ offset: 0 });
+  }, [checkResult, keyword]);
 
-  const handleTurnPage = useCallback(
-    async (_: number, offset: number) => {
-      getTableList({ offset, searchWord: keyword });
-    },
-    [keyword]
-  );
+  const handleTurnPage = useCallback(async (_: number, offset: number) => {
+    getTableList({ offset });
+  }, []);
 
   return (
     <Spinner visible={visible}>
